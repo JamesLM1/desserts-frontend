@@ -8,7 +8,7 @@
   font-display: swap;
 }
 
-@theme {
+:root {
   --font-sans: "Red Hat Text", sans-serif;
 }
 
