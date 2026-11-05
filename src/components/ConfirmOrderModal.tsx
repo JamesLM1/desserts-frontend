@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { cartPreviewItems } from '../data/cartPreview'
 
 interface ConfirmOrderModalProps {
@@ -14,17 +15,36 @@ function ConfirmOrderModal({
     isOpen,
     onClose,
 }: ConfirmOrderModalProps) {
+    const dialogRef = useRef<HTMLDialogElement>(null)
+
+    useEffect(() => {
+        if (!isOpen || !dialogRef.current) {
+            return
+        }
+
+        const dialog = dialogRef.current
+        const previousFocus = document.activeElement
+
+        if (!dialog.open) {
+            dialog.showModal()
+        }
+
+        return () => {
+            dialog.close()
+
+            if (previousFocus instanceof HTMLElement && previousFocus.isConnected) {
+                previousFocus.focus()
+            }
+        }
+    }, [isOpen])
+
     if (!isOpen) {
         return null
     }
 
     return (
         <dialog
-            ref={(dialog) => {
-                if (dialog && !dialog.open) {
-                    dialog.showModal()
-                }
-            }}
+            ref={dialogRef}
             onCancel={onClose}
             aria-labelledby="confirmation-title"
             aria-describedby="confirmation-description"
