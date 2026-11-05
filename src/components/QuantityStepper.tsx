@@ -20,7 +20,7 @@ function QuantityStepper({
             <button
                 type="button"
                 onClick={onDecrease}
-                aria-disabled={!onDecrease}
+                disabled={!onDecrease}
                 aria-label={`Decrease quantity of ${productName}`}
                 className="group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
@@ -48,7 +48,7 @@ function QuantityStepper({
             <button
                 type="button"
                 onClick={onIncrease}
-                aria-disabled={!onIncrease}
+                disabled={!onIncrease}
                 aria-label={`Increase quantity of ${productName}`}
                 className="group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >

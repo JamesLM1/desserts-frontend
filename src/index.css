@@ -18,3 +18,17 @@ body {
   background-color: #fcf8f6;
   color: #260f08;
 }
+
+@layer base {
+  button, a, input, select { -webkit-tap-highlight-color: transparent; }
+  button:not(:disabled) { cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: 0.5; }
+  :where(button, a, input, select):focus-visible { outline: 2px solid #c73a0f; outline-offset: 3px; }
+}
+
+@layer components {
+  .button-primary { @apply inline-flex min-h-12 items-center justify-center rounded-full bg-[#c73a0f] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#952c0c]; }
+  .button-secondary { @apply inline-flex min-h-11 items-center justify-center rounded-full border border-[#ad8985] bg-white px-4 py-2 text-sm font-semibold transition-colors hover:border-[#c73a0f] hover:text-[#c73a0f]; }
+  .field-input { @apply min-h-12 w-full rounded-lg border border-[#ad8985] bg-white px-4 text-base placeholder:text-[#87635a] disabled:opacity-60; }
+  .field-label { @apply mb-2 block text-sm font-semibold; }
+}
