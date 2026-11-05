@@ -16,7 +16,8 @@ export function useProductsQuery(filters: ProductFilters = {}) {
         page: filters.page ?? 1,
     }
     return useQuery({
-        queryKey: productKeys.list(normalized),
+        queryKey: !normalized.search && !normalized.categoryId && normalized.page === 1
+            ? productKeys.all : productKeys.list(normalized),
         queryFn: ({ signal }) => getProducts(normalized, signal),
     })
 }

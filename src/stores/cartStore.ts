@@ -77,7 +77,7 @@ export const useCartStore = create<CartState>()(persist((set) => ({
     remove: (id) => set((state) => ({ items: state.items.filter((item) => item.product.id !== id) })),
     refreshProduct: (product) => set((state) => ({
         items: state.items.map((item) => item.product.id === product.id
-            ? { ...item, product: { ...product, category: product.category ?? item.product.category } }
+            ? { ...item, product: { ...product, category: product.category ?? (product.categoryId === item.product.categoryId ? item.product.category : undefined) } }
             : item),
     })),
     clear: () => set({ items: [] }),

@@ -5,100 +5,100 @@
       "name": "Waffle with Berries",
       "price": 6.5,
       "image": "/assets/images/image-waffle-desktop.jpg",
-      "categoryId": "1"
+      "categoryId": "category-1"
     },
     {
       "id": "2",
       "name": "Vanilla Bean Crème Brûlée",
       "price": 7,
       "image": "/assets/images/image-creme-brulee-desktop.jpg",
-      "categoryId": "2"
+      "categoryId": "category-2"
     },
     {
       "id": "3",
       "name": "Macaron Mix of Five",
       "price": 8,
       "image": "/assets/images/image-macaron-desktop.jpg",
-      "categoryId": "3"
+      "categoryId": "category-3"
     },
     {
       "id": "4",
       "name": "Classic Tiramisu",
       "price": 5.5,
       "image": "/assets/images/image-tiramisu-desktop.jpg",
-      "categoryId": "4"
+      "categoryId": "category-4"
     },
     {
       "id": "5",
       "name": "Pistachio Baklava",
       "price": 4,
       "image": "/assets/images/image-baklava-desktop.jpg",
-      "categoryId": "5"
+      "categoryId": "category-5"
     },
     {
       "id": "6",
       "name": "Lemon Meringue Pie",
       "price": 5,
       "image": "/assets/images/image-meringue-desktop.jpg",
-      "categoryId": "6"
+      "categoryId": "category-6"
     },
     {
       "id": "7",
       "name": "Red Velvet Cake",
       "price": 4.5,
       "image": "/assets/images/image-cake-desktop.jpg",
-      "categoryId": "7"
+      "categoryId": "category-7"
     },
     {
       "id": "8",
       "name": "Salted Caramel Brownie",
       "price": 4.5,
       "image": "/assets/images/image-brownie-desktop.jpg",
-      "categoryId": "8"
+      "categoryId": "category-8"
     },
     {
       "id": "9",
       "name": "Vanilla Panna Cotta",
       "price": 6.5,
       "image": "/assets/images/image-panna-cotta-desktop.jpg",
-      "categoryId": "9"
+      "categoryId": "category-9"
     }
   ],
   "categories": [
     {
-      "id": "1",
+      "id": "category-1",
       "name": "Waffle"
     },
     {
-      "id": "2",
+      "id": "category-2",
       "name": "Crème Brûlée"
     },
     {
-      "id": "3",
+      "id": "category-3",
       "name": "Macaron"
     },
     {
-      "id": "4",
+      "id": "category-4",
       "name": "Tiramisu"
     },
     {
-      "id": "5",
+      "id": "category-5",
       "name": "Baklava"
     },
     {
-      "id": "6",
+      "id": "category-6",
       "name": "Pie"
     },
     {
-      "id": "7",
+      "id": "category-7",
       "name": "Cake"
     },
     {
-      "id": "8",
+      "id": "category-8",
       "name": "Brownie"
     },
     {
-      "id": "9",
+      "id": "category-9",
       "name": "Panna Cotta"
     }
   ]
