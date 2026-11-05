@@ -9,6 +9,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,3 +21,16 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run test:http
+      - name: Install browser test tools
+        run: npm install --no-save --package-lock=false @playwright/test@1.64.1
+      - run: npx playwright install --with-deps chromium
+      - name: Test storefront and CRUD in Chromium
+        run: node scripts/e2e.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: level3-browser-screenshots
+          path: node_modules/.tmp/level3-browser-results
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7

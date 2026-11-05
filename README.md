@@ -147,6 +147,10 @@ La respuesta paginada incluye data, items, pages, first, last, prev y next. La i
 
 ## Despliegue
 
+Frontend publicado: [desserts-frontend.vercel.app](https://desserts-frontend.vercel.app/).
+
+Rama de entrega: [nivel-3](https://github.com/JamesLM1/desserts-frontend/tree/nivel-3). Las ramas nivel-1 y nivel-2 permanecen disponibles.
+
 El frontend se prepara para Vercel con vercel.json: framework Vite, comando npm run build, salida dist y reescritura de rutas de la SPA. El proyecto debe desplegar la rama nivel-3.
 
 **La API permanece local por requisito de la prueba.** Para utilizar el frontend publicado, el visitante debe ejecutar npm run api en su equipo con el db.json del nivel 3. localhost siempre se refiere al equipo del visitante.
@@ -156,5 +160,7 @@ En Chrome puede aparecer una solicitud de acceso a la red local. Si el navegador
 El enlace publicado ofrece el frontend; no se ha trasladado json-server a una API online. Publicar un backend remoto autónomo requeriría cambiar la regla de la prueba.
 
 ## Validación de la entrega
+
+GitHub Actions ejecuta además una prueba de Chromium contra el build de producción y una copia temporal de db.json. Recorre catálogo, filtros, carrito, confirmación, CRUD, formularios, recuperación de errores y vista móvil; sus capturas se guardan como artefacto del workflow. Las herramientas del navegador se instalan solo en ese paso de CI y no forman parte del bundle de la tienda.
 
 Consulta [docs/TESTING.md](docs/TESTING.md) para los pasos de evaluación manual. Ejecuta npm run check y npm run test:http para comprobar código, servicios y persistencia. El historial de la rama conserva los commits por grupo de funcionalidades.

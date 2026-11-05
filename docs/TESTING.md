@@ -4,6 +4,17 @@ Ejecuta npm ci, npm run api y npm run dev desde la rama nivel-3. Mantén la API 
 
 ## Pruebas automáticas
 
+GitHub Actions también ejecuta scripts/e2e.mjs en Chromium con una base temporal. El workflow conserva capturas de escritorio, móvil, confirmación y cualquier fallo durante siete días. Para repetir esa comprobación en un entorno de desarrollo con ambos puertos libres:
+
+```powershell
+npm install --no-save --package-lock=false @playwright/test@1.64.1
+npx playwright install chromium
+npm run build
+node scripts/e2e.mjs
+```
+
+El script inicia y detiene sus propios servidores; no utiliza el db.json de trabajo para escribir los productos de prueba.
+
 ```powershell
 npm run check
 npm run test:http
