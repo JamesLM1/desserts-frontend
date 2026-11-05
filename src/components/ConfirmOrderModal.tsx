@@ -1,31 +1,12 @@
+import { cartPreviewItems } from '../data/cartPreview'
+
 interface ConfirmOrderModalProps {
     isOpen: boolean
     onClose: () => void
 }
 
-const sampleItems = [
-    {
-        name: 'Waffle with Berries',
-        quantity: 1,
-        price: 6.5,
-        image: '/assets/images/image-waffle-thumbnail.jpg',
-    },
-    {
-        name: 'Classic Tiramisu',
-        quantity: 1,
-        price: 5.5,
-        image: '/assets/images/image-tiramisu-thumbnail.jpg',
-    },
-    {
-        name: 'Vanilla Panna Cotta',
-        quantity: 2,
-        price: 6.5,
-        image: '/assets/images/image-panna-cotta-thumbnail.jpg',
-    },
-]
-
-const sampleTotal = sampleItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+const orderTotal = cartPreviewItems.reduce(
+    (total, item) => total + item.product.price * item.quantity,
     0,
 )
 
@@ -47,7 +28,7 @@ function ConfirmOrderModal({
             onCancel={onClose}
             aria-labelledby="confirmation-title"
             aria-describedby="confirmation-description"
-            className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-148 overflow-y-auto rounded-xl border-0 bg-white p-6 text-[#260f08] shadow-xl backdrop:bg-black/40 sm:p-10"
+            className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-dvh w-full max-w-none overflow-y-auto rounded-t-xl border-0 bg-white px-6 py-10 text-[#260f08] shadow-xl backdrop:bg-black/50 sm:inset-0 sm:m-auto sm:max-h-[90dvh] sm:max-w-148 sm:rounded-xl sm:p-10"
         >
             <img
                 src="/assets/images/icon-order-confirmed.svg"
@@ -57,49 +38,52 @@ function ConfirmOrderModal({
 
             <h2
                 id="confirmation-title"
-                className="text-4xl font-bold leading-tight"
+                className="text-[40px] font-bold leading-tight"
             >
                 Order Confirmed
             </h2>
 
             <p
                 id="confirmation-description"
-                className="mt-2 text-[#87635a]"
+                className="mt-2 text-base text-[#87635a]"
             >
                 We hope you enjoy your food!
             </p>
 
             <div className="my-8 rounded-lg bg-[#fcf8f6] px-6">
                 <ul className="divide-y divide-[#f4edeb]">
-                    {sampleItems.map((item) => (
+                    {cartPreviewItems.map(({ product, quantity }) => (
                         <li
-                            key={item.name}
-                            className="flex items-center gap-3 py-4"
+                            key={product.id}
+                            className="flex items-center gap-4 py-4"
                         >
                             <img
-                                src={item.image}
+                                src={product.image.replace(
+                                    '-desktop.jpg',
+                                    '-thumbnail.jpg',
+                                )}
                                 alt=""
                                 className="h-12 w-12 shrink-0 rounded object-cover"
                             />
 
                             <div className="min-w-0 flex-1">
                                 <p className="truncate text-sm font-semibold">
-                                    {item.name}
+                                    {product.name}
                                 </p>
 
                                 <div className="mt-2 flex gap-4 text-sm">
                                     <span className="font-semibold text-[#c73a0f]">
-                                        {item.quantity}x
+                                        {quantity}x
                                     </span>
 
                                     <span className="text-[#87635a]">
-                                        @ ${item.price.toFixed(2)}
+                                        @ ${product.price.toFixed(2)}
                                     </span>
                                 </div>
                             </div>
 
                             <p className="shrink-0 text-sm font-semibold">
-                                ${(item.price * item.quantity).toFixed(2)}
+                                ${(product.price * quantity).toFixed(2)}
                             </p>
                         </li>
                     ))}
@@ -109,7 +93,7 @@ function ConfirmOrderModal({
                     <p className="text-sm">Order Total</p>
 
                     <p className="text-2xl font-bold">
-                        ${sampleTotal.toFixed(2)}
+                        ${orderTotal.toFixed(2)}
                     </p>
                 </div>
             </div>
@@ -117,7 +101,7 @@ function ConfirmOrderModal({
             <button
                 type="button"
                 onClick={onClose}
-                className="min-h-12 w-full cursor-pointer rounded-full bg-[#c73a0f] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#952c0c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c73a0f]"
+                className="min-h-13 w-full cursor-pointer rounded-full bg-[#c73a0f] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#952c0c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c73a0f]"
             >
                 Start New Order
             </button>
