@@ -1,60 +1,42 @@
-import { useState } from 'react'
-import Header from './components/Header'
-import ProductCard from './components/ProductCard'
-import CartSummary from './components/CartSummary'
-import ConfirmOrderModal from './components/ConfirmOrderModal'
-import { products } from './data/products'
-import { cartPreviewItems } from './data/cartPreview'
-
-// true: muestra el ejemplo con productos.
-// false: muestra el carrito vacío.
-const SHOW_CART_PREVIEW = true
-
-const cartItems = SHOW_CART_PREVIEW ? cartPreviewItems : []
+import { Link, Route, Routes } from 'react-router'
+import ProductsPage from './pages/ProductsPage'
+import ProductDetailPage from './pages/ProductDetailPage'
 
 function App() {
-  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
-
   return (
-    <>
-      <main className="mx-auto min-h-screen max-w-[1440px] px-6 py-6 sm:px-10 sm:py-10 xl:px-28 xl:py-22">
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_384px]">
-          <section
-            aria-labelledby="desserts-title"
-            className="min-w-0"
-          >
-            <Header />
-
-            <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((product) => {
-                const quantity =
-                  cartItems.find(
-                    (item) => item.product.id === product.id,
-                  )?.quantity ?? 0
-
-                return (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    quantity={quantity}
-                  />
-                )
-              })}
-            </div>
-          </section>
-
-          <CartSummary
-            items={cartItems}
-            onConfirm={() => setIsConfirmationOpen(true)}
-          />
-        </div>
-      </main>
-
-      <ConfirmOrderModal
-        isOpen={isConfirmationOpen}
-        onClose={() => setIsConfirmationOpen(false)}
+    <Routes>
+      <Route
+        path="/"
+        element={<ProductsPage />}
       />
-    </>
+
+      <Route
+        path="/producto/:id"
+        element={<ProductDetailPage />}
+      />
+
+      <Route
+        path="*"
+        element={
+          <main className="mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-6 py-12 text-center">
+            <h1 className="text-5xl font-bold text-[#c73a0f]">
+              404
+            </h1>
+
+            <p className="mt-4 text-xl font-semibold">
+              Page not found
+            </p>
+
+            <Link
+              to="/"
+              className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-[#c73a0f] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#952c0c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c73a0f]"
+            >
+              Back to desserts
+            </Link>
+          </main>
+        }
+      />
+    </Routes>
   )
 }
 
