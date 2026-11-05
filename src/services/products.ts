@@ -1,54 +1,65 @@
+import { CanceledError } from 'axios'
 import { api } from './api'
-import type { Product } from '../interfaces/product'
+import type { Category, Product, ProductFilters, ProductInput, ProductPage } from '../interfaces/product'
 
-export interface ProductFilters {
-    search?: string
-    category?: string
-}
+export const PAGE_SIZE = 8
 
-function delay() {
-    return new Promise<void>((resolve) => {
-        setTimeout(resolve, 1200)
+function delay(signal?: AbortSignal) {
+    const configuredDelay = Number(import.meta.env.VITE_API_DELAY_MS ?? 1200)
+    const milliseconds = Number.isFinite(configuredDelay) ? Math.max(0, configuredDelay) : 1200
+    return new Promise<void>((resolve, reject) => {
+        if (signal?.aborted) {
+            reject(new CanceledError())
+            return
+        }
+        const onAbort = () => {
+            clearTimeout(timer)
+            reject(new CanceledError())
+        }
+        const timer = setTimeout(() => {
+            signal?.removeEventListener('abort', onAbort)
+            resolve()
+        }, milliseconds)
+        signal?.addEventListener('abort', onAbort, { once: true })
     })
 }
 
-export async function getProducts(
-    filters: ProductFilters = {},
-    signal?: AbortSignal,
-): Promise<Product[]> {
-    const params: Record<string, string> = {}
-
-    const search = filters.search?.trim()
-    const category = filters.category?.trim()
-
-    if (search) {
-        params['name:contains'] = search
+export async function getProducts(filters: ProductFilters = {}, signal?: AbortSignal): Promise<ProductPage> {
+    const params: Record<string, string | number> = {
+        _page: filters.page ?? 1,
+        _per_page: PAGE_SIZE,
+        _embed: 'category',
     }
-
-    if (category) {
-        params.category = category
-    }
-
-    await delay()
-
-    const { data } = await api.get<Product[]>('/products', {
-        params,
-        signal,
-    })
-
+    if (filters.search?.trim()) params['name:contains'] = filters.search.trim()
+    if (filters.categoryId) params.categoryId = filters.categoryId
+    await delay(signal)
+    const { data } = await api.get<ProductPage>('/products', { params, signal })
     return data
 }
 
-export async function getProduct(
-    id: string,
-    signal?: AbortSignal,
-): Promise<Product> {
-    await delay()
-
-    const { data } = await api.get<Product>(
-        `/products/${encodeURIComponent(id)}`,
-        { signal },
-    )
-
+export async function getProduct(id: string, signal?: AbortSignal): Promise<Product> {
+    await delay(signal)
+    const { data } = await api.get<Product>('/products/' + encodeURIComponent(id), {
+        params: { _embed: 'category' }, signal,
+    })
     return data
+}
+
+export async function getCategories(signal?: AbortSignal): Promise<Category[]> {
+    const { data } = await api.get<Category[]>('/categories', { signal })
+    return data
+}
+
+export async function createProduct(product: ProductInput): Promise<Product> {
+    const { data } = await api.post<Product>('/products', product)
+    return data
+}
+
+export async function updateProduct(id: string, product: ProductInput): Promise<Product> {
+    const { data } = await api.put<Product>('/products/' + encodeURIComponent(id), product)
+    return data
+}
+
+export async function deleteProduct(id: string): Promise<void> {
+    await api.delete('/products/' + encodeURIComponent(id))
 }
