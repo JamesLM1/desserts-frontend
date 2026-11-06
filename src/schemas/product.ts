@@ -6,8 +6,23 @@ export const productSchema = z.object({
     price: z.number().finite().positive('Price must be greater than zero.').max(10_000, 'Price cannot exceed 10,000.')
         .refine((price) => Math.abs(price * 100 - Math.round(price * 100)) < 0.000001, 'Use at most two decimal places.'),
     categoryId: z.string().min(1, 'Choose a category.'),
-    image: z.string().startsWith('/assets/images/', 'Choose a local product image.')
-        .refine((image) => !image.includes('..') && !image.includes('?') && !image.includes('#'), 'Use a valid local image path.'),
+    image: z.string().trim().min(1, 'Enter an image URL or a local image path.').max(2048)
+        .refine((image) => {
+            if (/\s/.test(image)) return false
+            if (image.startsWith('/')) {
+                try {
+                    const path = decodeURIComponent(image)
+                    return /^\/(?!\/)[^\\?#\s]+\.(avif|gif|jpe?g|png|svg|webp)$/i.test(path)
+                        && !path.split('/').some((segment) => segment === '.' || segment === '..')
+                } catch { return false }
+            }
+            if (!/^https?:\/\/[^\\\s]+$/i.test(image)) return false
+            try {
+                const url = new URL(image)
+                return (url.protocol === 'https:' || url.protocol === 'http:')
+                    && Boolean(url.hostname) && !url.username && !url.password
+            } catch { return false }
+        }, 'Use an http(s) image URL or a local path such as /assets/images/my-dessert.jpg.'),
 })
 
 export type ProductFormValues = z.infer<typeof productSchema>

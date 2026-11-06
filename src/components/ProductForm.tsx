@@ -1,11 +1,12 @@
 import { Link } from 'react-router'
-import { useForm } from 'react-hook-form'
-import { productResolver } from '../schemas/product'
+import { useForm, useWatch } from 'react-hook-form'
+import { productResolver, productSchema } from '../schemas/product'
 import type { ProductFormValues } from '../schemas/product'
 import { useCategoriesQuery } from '../hooks/useProductsQueries'
 import { productImages } from '../data/productImages'
 import { apiErrorMessage } from '../services/errors'
 import ErrorState from './ErrorState'
+import ProductImage from './ProductImage'
 
 interface ProductFormProps {
     defaultValues: ProductFormValues
@@ -15,10 +16,12 @@ interface ProductFormProps {
 
 export default function ProductForm({ defaultValues, submitLabel, onSubmit }: ProductFormProps) {
     const categories = useCategoriesQuery()
-    const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<ProductFormValues>({
+    const { register, handleSubmit, setError, control, formState: { errors, isSubmitting } } = useForm<ProductFormValues>({
         defaultValues,
         resolver: productResolver,
     })
+    const image = useWatch({ control, name: 'image' })
+    const imageSource = productSchema.shape.image.safeParse(image)
     async function submit(values: ProductFormValues) {
         if (!categories.data?.some((category) => category.id === values.categoryId)) {
             setError('categoryId', { message: 'Choose a category from the current list.' })
@@ -60,13 +63,19 @@ export default function ProductForm({ defaultValues, submitLabel, onSubmit }: Pr
                 </div>
                 <div>
                     <label htmlFor="image" className="field-label">Product image</label>
-                    <select id="image" className="field-input" aria-invalid={Boolean(errors.image)}
-                        aria-describedby={errors.image ? 'image-error' : undefined} {...register('image')}>
-                        {!productImages.some((image) => image.value === defaultValues.image) && <option value={defaultValues.image}>Current image</option>}
-                        {productImages.map((image) => <option key={image.value} value={image.value}>{image.label}</option>)}
-                    </select>
-                    <p className="mt-2 text-xs text-[#87635a]">Images are included with the project and do not require an external service.</p>
+                    <input id="image" className="field-input" type="text" list="product-image-options" maxLength={2048}
+                        placeholder="https://example.com/my-dessert.jpg" autoComplete="off" spellCheck={false}
+                        aria-invalid={Boolean(errors.image)}
+                        aria-describedby={errors.image ? 'image-help image-error' : 'image-help'} {...register('image')} />
+                    <datalist id="product-image-options">
+                        {productImages.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    </datalist>
+                    <p id="image-help" className="mt-2 text-xs text-[#87635a]">Paste a direct image URL or a local path such as /assets/images/my-dessert.jpg. You can also choose an included image. One image is used on every screen.</p>
                     {errorMessage('image')}
+                    {imageSource.success && <div className="mt-4 max-w-xs">
+                        <p className="mb-2 text-sm text-[#87635a]">Image preview</p>
+                        <ProductImage src={imageSource.data} alt="Product image preview" className="aspect-square w-full rounded-lg object-cover" />
+                    </div>}
                 </div>
                 {errors.root && <p role="alert" className="rounded-lg bg-red-50 p-4 text-sm text-red-700">{errors.root.message}</p>}
                 <div className="flex flex-wrap gap-3">
