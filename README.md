@@ -10,8 +10,6 @@ Prueba técnica frontend de una tienda de postres. El proyecto usa React, Vite y
 | nivel-2 | Axios, TanStack Query, búsqueda, filtros, skeletons y detalle. |
 | nivel-3 | Carrito real con Zustand, CRUD, formularios, categorías, paginación y despliegue del frontend. |
 
-Cada nivel conserva su propia rama. Los commits del nivel 3 no llevan emojis, por indicación del autor.
-
 ## Stack
 
 React, Vite, TypeScript, Tailwind CSS, React Router, Axios, TanStack Query, Zustand, React Hook Form, Zod y json-server 1.0.0-beta.15.
